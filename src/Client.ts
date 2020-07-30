@@ -6,6 +6,9 @@ import { CommandExecutor } from "./decorators/Command.ts";
 
 const Ref = Reflection as any;
 
+/**
+ * Options for the discord client
+ */
 export interface DiscordClientOptions {
 	commands: Newable<CommandExecutor>[];
 	events?: Newable<CommandExecutor>;
@@ -14,12 +17,34 @@ export interface DiscordClientOptions {
 	prefix: string;
 }
 
+/**
+ * Discord Client
+ */
 export class DiscordClient {
 	public client: Client
 	public options: DiscordClientOptions;
 	public container: Container;
 	private readonly logger: Logger;
 	private commands: Map<CommandMeta, CommandExecutor>;
+	
+	/**
+	 * Discord Client
+	 * ```ts
+	 * \@Command("test")
+	 * class TestCommand implements CommandExecutor {
+	 *   async execute(bot, message, parsedMessage) {
+	 *     message.channel.createMessage("Tested!");
+	 *   }
+	 * }
+	 * 
+	 * const bot = new DiscordClient("token", {
+	 *   commands: [TestCommand],
+	 *   prefix: "d!"
+	 * });
+	 *  
+	 * bot.start();
+	 * ```
+	 */
 
 	constructor(
 		token: string,
@@ -70,12 +95,18 @@ export class DiscordClient {
 		}
 	}
 
-
-	public start() {
-		this.client.connect();
+	/**
+	 * Starts the bot
+	 * ```ts
+	 * await bot.start();
+	 * ```
+	 */
+	public async start() {
+		return this.client.gateway.connect();
 	}
 }
 
+//TODO: Move to utils
 const findCommand = (commands: Map<CommandMeta, CommandExecutor>, parsed: SuccessfulParsedMessage) : CommandMeta | undefined => {
 	for(let commandMeta of commands.keys()) {
 		if(commandMeta.name == parsed.command || (

@@ -13,20 +13,20 @@ container.add(Test, new Test("Hello, World!"));
 const logger = new Logger();
 
 logger.addTransport(new ColourConsoleTransport());
-
+new DiscordClient("", {prefix: "", commands: []})
 @Command("test", {description: "Test command"})
 class TestCommand implements CommandExecutor {
 	constructor(@Inject(Test) private test: Test) {}
 
 	async execute(bot: DiscordClient, message: Message, parsed: SuccessfulParsedMessage) {
-		bot.client.createMessage(message.channel.id, this.test.msg);
+		message.channel.createMessage("Tested!");
 	}
 }
 
 @Command("print", {description: "Print command", permissions: ["ADMINISTRATOR"]})
 class PrintCommand implements CommandExecutor {
 	async execute(bot: DiscordClient, message: Message, parsed: SuccessfulParsedMessage) {
-		bot.client.createMessage(message.channel.id, parsed.arguments.join(" "));
+		message.channel.createMessage(parsed.arguments.join(" "));
 	}
 }
 
@@ -38,4 +38,4 @@ const bot = new DiscordClient(token,{
 });
 
 logger.info("Starting!");
-bot.start();
+await bot.start();
