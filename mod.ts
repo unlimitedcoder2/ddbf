@@ -4,7 +4,8 @@ export {
 } from "./src/Client.ts";
 
 export {
-	Command
+	Command,
+	CommandExecutor
 } from "./src/decorators/Command.ts";
 
 export {
@@ -14,3 +15,5 @@ export {
 export {
 	Constants
 } from "./src/Constants.ts";
+
+export * from "./deps.ts";

@@ -1,7 +1,4 @@
-import { DiscordClient } from "../../mod.ts";
-import { Logger, ColourConsoleTransport, Message, SuccessfulParsedMessage } from "../../deps.ts";
-import { CommandExecutor, Command } from "../decorators/Command.ts";
-import { Container, Inject } from "../../dependencies/container.ts";
+import { DiscordClient, Inject, Command, CommandExecutor, Container, Logger, ColourConsoleTransport, Message, SuccessfulParsedMessage } from "../../mod.ts";
 
 //TODO: Remove this or regenerate it //DONE. I removed it (thanks to DebitCardz)
 const token = "";
