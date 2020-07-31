@@ -1,8 +1,23 @@
-import { Client, Logger, parse, SuccessfulParsedMessage, Message, Container, Newable } from "../deps.ts";
-import { Reflection } from "../deps.ts";
-import { Constants } from "./Constants.ts";
-import { CommandMeta } from "./metadata/CommandMeta.ts";
-import { CommandExecutor } from "./decorators/Command.ts";
+import {
+	Client,
+	Logger,
+	parse,
+	SuccessfulParsedMessage,
+	Message,
+	Container,
+	Newable
+} from "../deps.ts";
+
+import {
+	CommandUtils,
+	CommandExecutor,
+	CommandMeta,
+	Constants,
+	Reflection,
+	DMChannel
+} from "../mod.ts";
+
+import { PermissionUtils } from "./utils/PermissionUtils.ts";
 
 const Ref = Reflection as any;
 
@@ -69,15 +84,18 @@ export class DiscordClient {
 
 			if(parsed.success) {
 				parsed = parsed as SuccessfulParsedMessage;
-				const command = findCommand(this.commands, parsed);
-				
-				if(command) {
-					if(command.permissions) {
-						checkPerms(this.client, message);
-					}
-					const executor = this.commands.get(command)!;
-					executor.execute(this, message, parsed);
-				}
+				const command = CommandUtils.findCommand(this.commands, parsed);
+				if(!command) return;
+
+				if(
+					command.permissions && // Check if the command has permissions set
+					message.member && // Make sure that the member object exists
+					!(message.channel instanceof DMChannel) && // Make sure it is not dms
+					!PermissionUtils.hasPerms(message, command.permissions) // check that the user has the permissions
+				) return;
+
+				const executor = this.commands.get(command)!;
+				executor.execute(this, message, parsed);
 			}
 		});
 	}
@@ -105,27 +123,3 @@ export class DiscordClient {
 		return this.client.gateway.connect();
 	}
 }
-
-//TODO: Move to utils
-const findCommand = (commands: Map<CommandMeta, CommandExecutor>, parsed: SuccessfulParsedMessage) : CommandMeta | undefined => {
-	for(let commandMeta of commands.keys()) {
-		if(commandMeta.name == parsed.command || (
-			commandMeta.aliases && 
-			commandMeta.aliases.length > 0 &&
-			commandMeta.aliases.includes(parsed.command)
-			)) return commandMeta;
-	}
-};
-
-const checkPerms = (bot: Client, message: Message): boolean => {
-	const guildId = bot.channelGuildIDs.get(message.channel.id)!;
-	const guild = bot.guilds.get(guildId)!;
-
-	const roles = guild.roles;
-	const member = guild.members.get(message.author.id);
-	
-	
-
-
-	return true;
-};

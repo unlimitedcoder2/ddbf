@@ -11,31 +11,31 @@ export interface Newable<T> {
 	new(...args: any[]): T;
 }
 
-export type InjectMeta = Map<number, Function>;
+export type InjectMeta = Map<number, Newable<any>>;
 
-export const metaKey = "DDBF:Container";
+export const metaKey = "Reflection:Container";
 
-export const Inject = (type: Function): ParameterDecorator => {
+export const Inject = <T>(type: Newable<T>): ParameterDecorator => {
 	return (target, propertyKey, parameterIndex) => {
-		const meta = Ref.getMetadata(metaKey, target) || new Map<number, Function>();
+		const meta = Ref.getMetadata(metaKey, target) || new Map<number, Newable<T>>();
 		meta.set(parameterIndex, type);
 		Ref.defineMetadata(metaKey, meta, target);
 	};
 }
 
 export class Container implements IContainer {
-	private container: Map<Function, any>;
+	private container: Map<Newable<any>, any>;
 
 	constructor() {
-		this.container = new Map<Function, any>();
+		this.container = new Map<Newable<any>, any>();
 	}
 
-	add<T>(type: Function, value?: T) {
+	add<T>(type: Newable<T>, value?: T) {
 		this.container.set(type, value);
 		return value;
 	}
 
-	get<T>(type: Function) : T{
+	get<T>(type: Newable<T>) : T{
 		const value = this.container.get(type);
 		return value;
 	}

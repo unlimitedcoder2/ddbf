@@ -1,1 +1,1 @@
-deno run -A -c tsconfig.json --unstable deps.ts
+deno run -A -r -c tsconfig.json --unstable deps.ts

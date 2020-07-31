@@ -1,39 +1,22 @@
 import { DiscordClient, Inject, Command, CommandExecutor, Container, Logger, ColourConsoleTransport, Message, SuccessfulParsedMessage } from "../../mod.ts";
 
 //TODO: Remove this or regenerate it //DONE. I removed it (thanks to DebitCardz)
-const token = "";
-
-class Test {
-	constructor(public msg: string) {}
-}
-
-const container = new Container();
-container.add(Test, new Test("Hello, World!"));
+const token = "NzM2NTMyNTIxMDY3NDc5MDgw.XxwLXQ.x_U4qJH_DuaJ_ZIw-99z2a_dQxM";
 
 const logger = new Logger();
 
 logger.addTransport(new ColourConsoleTransport());
-new DiscordClient("", {prefix: "", commands: []})
+
 @Command("test", {description: "Test command"})
 class TestCommand implements CommandExecutor {
-	constructor(@Inject(Test) private test: Test) {}
-
 	async execute(bot: DiscordClient, message: Message, parsed: SuccessfulParsedMessage) {
 		message.channel.createMessage("Tested!");
 	}
 }
 
-@Command("print", {description: "Print command", permissions: ["ADMINISTRATOR"]})
-class PrintCommand implements CommandExecutor {
-	async execute(bot: DiscordClient, message: Message, parsed: SuccessfulParsedMessage) {
-		message.channel.createMessage(parsed.arguments.join(" "));
-	}
-}
-
 const bot = new DiscordClient(token,{
-	commands: [TestCommand, PrintCommand],
+	commands: [TestCommand],
 	logger,
-	container,
 	prefix: "d!"
 });
 

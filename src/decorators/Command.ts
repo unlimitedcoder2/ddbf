@@ -1,7 +1,6 @@
-import { Reflection, Message, SuccessfulParsedMessage } from "../../deps.ts";
+import { Reflection } from "../../deps.ts";
 import { Constants } from "../Constants.ts";
-import { CommandMeta } from "../metadata/CommandMeta.ts";
-import { DiscordClient } from "../../mod.ts";
+import { CommandMeta } from "../structures/metadata/CommandMeta.ts";
 
 const Ref = Reflection as any;
 
@@ -12,8 +11,4 @@ export const Command = (name: string, meta?: Partial<CommandMeta>) : ClassDecora
 			...meta
 		} as CommandMeta, target);
 	};
-}
-
-export interface CommandExecutor {
-	execute(bot: DiscordClient, message: Message, parsed: SuccessfulParsedMessage): void | Promise<void>;
 }
