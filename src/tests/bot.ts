@@ -1,7 +1,8 @@
 import { DiscordClient, Inject, Command, CommandExecutor, Container, Logger, ColourConsoleTransport, Message, SuccessfulParsedMessage } from "../../mod.ts";
 
 //TODO: Remove this or regenerate it //DONE. I removed it (thanks to DebitCardz)
-const token = "NzM2NTMyNTIxMDY3NDc5MDgw.XxwLXQ.x_U4qJH_DuaJ_ZIw-99z2a_dQxM";
+//Even if the token was regenerated it'd still be best to remove it completely. - DebitCardz
+const token = "TOKEN";
 
 const logger = new Logger();
 
